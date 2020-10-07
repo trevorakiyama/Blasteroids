@@ -17,12 +17,12 @@ public class PlayerShipScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var m = UnityEngine.InputSystem.Mouse.current.position.ReadValue();
-        var mm = Camera.main.ScreenToWorldPoint(new Vector3(m.x, m.y, 200));
+        //var m = UnityEngine.InputSystem.Mouse.current.position.ReadValue();
+        //var mm = Camera.main.ScreenToWorldPoint(new Vector3(m.x, m.y, 200));
 
-        gameObject.transform.position = mm;
+        //gameObject.transform.position = mm;
 
-        PlayerShipScript.position = mm;
+        //PlayerShipScript.position = mm;
 
     }
 }

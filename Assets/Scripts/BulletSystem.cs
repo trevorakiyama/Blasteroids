@@ -17,50 +17,51 @@ public class BulletSystem : SystemBase
 
     protected override void OnUpdate()
     {
-        // Just shoot a bullet every 1/10 second
-        float delta = Time.DeltaTime;
-        double elapsed = Time.ElapsedTime;
+        //// Just shoot a bullet every 1/10 second
+        //float delta = Time.DeltaTime;
+        //double elapsed = Time.ElapsedTime;
         
 
 
-        if (PlayerInputStates.IsFired())
-        {
+        //if (PlayerInputStates.IsFired())
+        //{
 
-            PlayerInputStates.ResetFire();
+        //    PlayerInputStates.ResetFire();
 
-            Vector3 playerPos = PlayerShipScript.position;
+        //    Vector3 playerPos = PlayerShipScript.position;
 
-            EntityManager.AddComponentData<Movement>(Prefabs.bulletPrefab,
-            new Movement
-            {
-                velocity = new float3(0, 50, 0),
-                dummy = 10
-            }) ;
+        //    EntityManager.AddComponentData<Movement>(Prefabs.bulletPrefab,
+        //    new Movement
+        //    {
+        //        velocity = new float3(0, 50, 0),
+        //        dummy = 10
+        //    });
 
-            EntityManager.AddComponentData<TTL>(Prefabs.bulletPrefab,
-            new TTL
-            {
-                ttl = 2
-            }) ;
-
-
-            Entity newEntity = EntityManager.Instantiate(Prefabs.bulletPrefab);
-            EntityManager.SetComponentData<Translation>(newEntity, new Translation
-            {
-                Value = playerPos
-            });
-        }
-
-        try
-        {
-            UpdateForEach(delta);
-        } catch (System.Exception e)
-        {
-            Debug.LogError("Exception" + e.ToString());
+        //    EntityManager.AddComponentData<TTL>(Prefabs.bulletPrefab,
+        //    new TTL
+        //    {
+        //        ttl = 2
+        //    });
 
 
+        //    Entity newEntity = EntityManager.Instantiate(Prefabs.bulletPrefab);
+        //    EntityManager.SetComponentData<Translation>(newEntity, new Translation
+        //    {
+        //        Value = playerPos
+        //    });
+        //}
 
-        }
+        //try
+        //{
+        //    UpdateForEach(delta);
+        //}
+        //catch (System.Exception e)
+        //{
+        //    Debug.LogError("Exception" + e.ToString());
+
+
+
+        //}
     }
 
 

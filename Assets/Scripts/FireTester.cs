@@ -63,6 +63,8 @@ public class FireTester : MonoBehaviour
     private void HandleNoFire(InputAction.CallbackContext context)
     {
 
+        
+
         var started = context.started;
         var startTime = context.startTime;
         var time = context.time;
