@@ -47,7 +47,7 @@ public class FireTester : MonoBehaviour
         var time = context.time;
         var phase = context.phase;
 
-        Debug.Log($"Fire {started} {startTime} {time} {phase}");
+        //Debug.Log($"Fire {started} {startTime} {time} {phase}");
 
 
 
@@ -70,7 +70,7 @@ public class FireTester : MonoBehaviour
         var time = context.time;
         var phase = context.phase;
 
-        Debug.Log($"Fire {started} {startTime} {time} {phase}");
+        //Debug.Log($"Fire {started} {startTime} {time} {phase}");
     }
 
 
