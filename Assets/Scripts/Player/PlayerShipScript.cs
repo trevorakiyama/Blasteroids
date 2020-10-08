@@ -11,18 +11,15 @@ public class PlayerShipScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
-    }
+        Cursor.visible = false;
 
-    // Update is called once per frame
-    void Update()
-    {
-        var m = UnityEngine.InputSystem.Mouse.current.position.ReadValue();
-        var mm = Camera.main.ScreenToWorldPoint(new Vector3(m.x, m.y, 200));
 
-        gameObject.transform.position = mm;
 
-        PlayerShipScript.position = mm;
 
     }
+
+    //// Update is called once per frame
+    //void Update()
+    //{
+    //}
 }

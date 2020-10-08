@@ -41,36 +41,12 @@ public class FireTester : MonoBehaviour
 
     private void HandleFire(InputAction.CallbackContext context)
     {
-
-        var started =context.started;
-        var startTime = context.startTime;
-        var time = context.time;
-        var phase = context.phase;
-
-        //Debug.Log($"Fire {started} {startTime} {time} {phase}");
-
-
-
-        // Simple Test
-        // Fire a single bullet from the player ship
-
-
-
         PlayerInputStates.Fire();
-
     }
 
     private void HandleNoFire(InputAction.CallbackContext context)
     {
-
-        
-
-        var started = context.started;
-        var startTime = context.startTime;
-        var time = context.time;
-        var phase = context.phase;
-
-        //Debug.Log($"Fire {started} {startTime} {time} {phase}");
+        PlayerInputStates.ResetFire();
     }
 
 

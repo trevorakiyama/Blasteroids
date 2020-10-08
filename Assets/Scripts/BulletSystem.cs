@@ -10,6 +10,7 @@ public class BulletSystem : SystemBase
 {
 
     float lastBulletTime = 0;
+    readonly float bulletDelay = .05f;
 
 
 
@@ -17,38 +18,76 @@ public class BulletSystem : SystemBase
 
     protected override void OnUpdate()
     {
+
+        // TODO: The player bullet system should be separated from the generic Bullet System.
+
         // Just shoot a bullet every 1/10 second
         float delta = Time.DeltaTime;
-        double elapsed = Time.ElapsedTime;
 
 
 
         if (PlayerInputStates.IsFired())
         {
+            bool newBullet = false;
 
-            PlayerInputStates.ResetFire();
+            lastBulletTime += Time.DeltaTime;
 
-            Vector3 playerPos = PlayerShipScript.position;
-
-            EntityManager.AddComponentData<Movement>(Prefabs.bulletPrefab,
-            new Movement
+            if (PlayerInputStates.newfire)
             {
-                velocity = new float3(0, 50, 0),
-                dummy = 10
-            });
+                newBullet = true;
+                PlayerInputStates.newfire = false;
 
-            EntityManager.AddComponentData<TTL>(Prefabs.bulletPrefab,
-            new TTL
+                lastBulletTime = 0;
+
+            } else
             {
-                ttl = 2
-            });
+
+                if (lastBulletTime > bulletDelay)
+                {
+                    newBullet = true;
+                    lastBulletTime -= bulletDelay;
+                }
+
+            }
 
 
-            Entity newEntity = EntityManager.Instantiate(Prefabs.bulletPrefab);
-            EntityManager.SetComponentData<Translation>(newEntity, new Translation
+            if (newBullet)
             {
-                Value = playerPos
-            });
+
+
+                Vector3 playerPos = PlayerShipScript.position;
+                Vector3 targetPos = TargetScript.position;
+
+                // Calculate rotation
+                Vector3 dir = targetPos - playerPos;
+
+                Quaternion look = Quaternion.LookRotation(dir, new Vector3(0, 0, 1));
+
+                EntityManager.AddComponentData<Movement>(Prefabs.bulletPrefab,
+                new Movement
+                {
+                    velocity = dir.normalized * 100,
+                    dummy = 10
+                });
+
+                EntityManager.AddComponentData<TTL>(Prefabs.bulletPrefab,
+                new TTL
+                {
+                    ttl = 2
+                });
+
+
+                Entity newEntity = EntityManager.Instantiate(Prefabs.bulletPrefab);
+                EntityManager.SetComponentData<Translation>(newEntity, new Translation
+                {
+                    Value = playerPos
+                });
+                EntityManager.SetComponentData<Rotation>(newEntity, new Rotation
+                {
+                    Value = look
+                });
+            }
+
         }
 
         try
@@ -71,7 +110,7 @@ public class BulletSystem : SystemBase
         Entities.ForEach((Entity entity, ref Translation translation, ref Movement movement) =>
         {
 
-            translation.Value = translation.Value + new float3(movement.velocity.x * delta, movement.velocity.y * delta, movement.velocity.z * delta);
+            translation.Value += new float3(movement.velocity.x * delta, movement.velocity.y * delta, movement.velocity.z * delta);
 
         }).Schedule();
 
@@ -82,7 +121,7 @@ public class BulletSystem : SystemBase
 
         Entities.ForEach((Entity entity, ref TTL ttl) =>
         {
-            ttl.ttl = ttl.ttl - delta;
+            ttl.ttl -= delta;
             if (ttl.ttl <= 0)
             {
                 buf.DestroyEntity(entity);
@@ -99,6 +138,8 @@ public class BulletSystem : SystemBase
 public struct Movement : IComponentData
 {
     public float3 velocity;
+
+
     public int dummy;
 }
 
