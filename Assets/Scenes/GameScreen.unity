@@ -646,6 +646,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1117145219}
   - component: {fileID: 1117145220}
+  - component: {fileID: 1117145221}
   m_Layer: 0
   m_Name: Target
   m_TagString: Untagged
@@ -680,6 +681,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2a36df8e0f5ef14894aba04278d2faf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1117145221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1117145218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea7d7495833204790ba1d3a8755397f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ConversionMode: 0
 --- !u!1 &1134897647
 GameObject:
   m_ObjectHideFlags: 0
@@ -1189,6 +1203,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1899546934}
   - component: {fileID: 1899546935}
+  - component: {fileID: 1899546936}
   m_Layer: 0
   m_Name: PlayerShip
   m_TagString: Untagged
@@ -1224,6 +1239,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d626c868826a855489541f231cb2de27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1899546936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1899546933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea7d7495833204790ba1d3a8755397f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ConversionMode: 0
 --- !u!1 &2118839809
 GameObject:
   m_ObjectHideFlags: 0

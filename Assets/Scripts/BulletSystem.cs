@@ -55,8 +55,9 @@ public class BulletSystem : SystemBase
             {
 
 
-                Vector3 playerPos = PlayerShipScript.position;
-                Vector3 targetPos = TargetScript.position;
+                // TODO Make this call objects or even entity managers.
+                Vector3 playerPos = PlayerSystem.playerPos; // PlayerShipScript.position;
+                Vector3 targetPos = TargetSystem.targetPos; // TargetScript.position;
 
                 // Calculate rotation
                 Vector3 dir = targetPos - playerPos;
