@@ -4,6 +4,8 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 using Unity.Jobs;
+using Unity.Profiling;
+using Unity.Burst;
 
 [AlwaysUpdateSystem]
 public class BulletSystem : SystemBase
@@ -12,128 +14,107 @@ public class BulletSystem : SystemBase
     float lastBulletTime = 0;
     readonly float bulletDelay = .05f;
 
-
-
-
-
     protected override void OnUpdate()
     {
-
-        // TODO: The player bullet system should be separated from the generic Bullet System.
-
-        // Just shoot a bullet every 1/10 second
         float delta = Time.DeltaTime;
 
+        UpdateForEach(delta);
 
 
-        if (PlayerInputStates.IsFired())
-        {
-            bool newBullet = false;
+        // Deal with collisions
 
-            lastBulletTime += Time.DeltaTime;
-
-            if (PlayerInputStates.newfire)
-            {
-                newBullet = true;
-                PlayerInputStates.newfire = false;
-
-                lastBulletTime = 0;
-
-            } else
-            {
-
-                if (lastBulletTime > bulletDelay)
-                {
-                    newBullet = true;
-                    lastBulletTime -= bulletDelay;
-                }
-
-            }
-
-
-            if (newBullet)
-            {
-
-
-                // TODO Make this call objects or even entity managers.
-                Vector3 playerPos = PlayerSystem.playerPos; // PlayerShipScript.position;
-                Vector3 targetPos = TargetSystem.targetPos; // TargetScript.position;
-
-                // Calculate rotation
-                Vector3 dir = targetPos - playerPos;
-
-                Quaternion look = Quaternion.LookRotation(dir, new Vector3(0, 0, 1));
-
-                EntityManager.AddComponentData<Movement>(Prefabs.bulletPrefab,
-                new Movement
-                {
-                    velocity = dir.normalized * 100,
-                    dummy = 10
-                });
-
-                EntityManager.AddComponentData<TTL>(Prefabs.bulletPrefab,
-                new TTL
-                {
-                    ttl = 2
-                });
-
-
-                Entity newEntity = EntityManager.Instantiate(Prefabs.bulletPrefab);
-                EntityManager.SetComponentData<Translation>(newEntity, new Translation
-                {
-                    Value = playerPos
-                });
-                EntityManager.SetComponentData<Rotation>(newEntity, new Rotation
-                {
-                    Value = look
-                });
-            }
-
-        }
-
-        try
-        {
-            UpdateForEach(delta);
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError("Exception" + e.ToString());
-
-
-
-        }
+       
     }
 
-
+    ProfilerMarker m1 = new ProfilerMarker("m1");
 
     public void UpdateForEach(float delta)
     {
+
+
+        float delt = delta;
+
+       
+
         Entities.ForEach((Entity entity, ref Translation translation, ref Movement movement) =>
         {
 
-            translation.Value += new float3(movement.velocity.x * delta, movement.velocity.y * delta, movement.velocity.z * delta);
+            translation.Value = translation.Value + movement.velocity * delt;
 
-        }).Schedule();
+        }).WithBurst().Run();
 
+        
 
         EndSimulationEntityCommandBufferSystem ecbs = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
-        var buf = ecbs.CreateCommandBuffer();
+        var buf = ecbs.CreateCommandBuffer().AsParallelWriter();
 
 
-        Entities.ForEach((Entity entity, ref TTL ttl) =>
+        m1.Begin();
+
+        Entities.ForEach((Entity entity, int entityInQueryIndex, ref TTL ttl) =>
         {
             ttl.ttl -= delta;
             if (ttl.ttl <= 0)
             {
-                buf.DestroyEntity(entity);
+                buf.DestroyEntity(entityInQueryIndex, entity);
             }
-        }).Schedule();
+        }).WithBurst().ScheduleParallel();
 
 
         ecbs.AddJobHandleForProducer(this.Dependency);
+
+        m1.End();
+    }
+
+
+    public void createBullet(float3 sourcePos, Quaternion direction, float3 velocity, float ttl, Entity owner)
+    {
+
+        // TODO:  These updates need to be done at start time not update time, maybe even pooling
+
+        EntityManager.AddComponentData<Movement>(Prefabs.bulletPrefab,
+                new Movement
+                {
+                    velocity = velocity,
+                    dummy = 10
+                });
+
+        EntityManager.AddComponentData<TTL>(Prefabs.bulletPrefab,
+        new TTL
+        {
+            ttl = 2
+        });
+
+
+        Entity newEntity = EntityManager.Instantiate(Prefabs.bulletPrefab);
+
+        
+
+
+        EntityManager.SetComponentData<Translation>(newEntity, new Translation
+        {
+            Value = sourcePos
+        });
+        EntityManager.SetComponentData<Rotation>(newEntity, new Rotation
+        {
+            Value = direction
+        }) ;
+
+
+
+
+
+
+
     }
 
 }
+
+
+
+
+
+
 
 
 public struct Movement : IComponentData
@@ -147,4 +128,9 @@ public struct Movement : IComponentData
 public struct TTL : IComponentData
 {
     public float ttl;
+}
+
+public struct Bullet : IComponentData
+{
+    public Entity shooter;
 }

@@ -22,9 +22,6 @@ public class TargetScript : MonoBehaviour
     void Update()
     {
 
-        Debug.Log("Called Update for TargetScript");
-
-
         var m = UnityEngine.InputSystem.Mouse.current.position.ReadValue();
         var mm = Camera.main.ScreenToWorldPoint(new Vector3(m.x, m.y, 200));
 
