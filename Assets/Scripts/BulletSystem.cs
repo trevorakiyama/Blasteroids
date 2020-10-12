@@ -13,6 +13,9 @@ public class BulletSystem : SystemBase
 
     float lastBulletTime = 0;
     readonly float bulletDelay = .05f;
+    
+
+
 
     protected override void OnUpdate()
     {
@@ -67,28 +70,24 @@ public class BulletSystem : SystemBase
     }
 
 
-    public void createBullet(float3 sourcePos, Quaternion direction, float3 velocity, float ttl, Entity owner)
+    public void createBullet(float3 sourcePos, Quaternion direction, float3 _velocity, float ttl, Entity owner)
     {
-
-        // TODO:  These updates need to be done at start time not update time, maybe even pooling
-
-        EntityManager.AddComponentData<Movement>(Prefabs.bulletPrefab,
-                new Movement
-                {
-                    velocity = velocity,
-                    dummy = 10
-                });
-
-        EntityManager.AddComponentData<TTL>(Prefabs.bulletPrefab,
-        new TTL
-        {
-            ttl = 2
-        });
-
 
         Entity newEntity = EntityManager.Instantiate(Prefabs.bulletPrefab);
 
-        
+        EntityManager.SetComponentData<Movement>(newEntity,
+               new Movement
+               {
+                   velocity = _velocity,
+                   dummy = 10
+               });
+
+        EntityManager.AddComponentData<TTL>(newEntity,
+                new TTL
+                {
+                    ttl = 2
+                });
+
 
 
         EntityManager.SetComponentData<Translation>(newEntity, new Translation
@@ -99,12 +98,6 @@ public class BulletSystem : SystemBase
         {
             Value = direction
         }) ;
-
-
-
-
-
-
 
     }
 

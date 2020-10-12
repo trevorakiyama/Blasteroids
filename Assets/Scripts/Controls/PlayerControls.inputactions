@@ -68,6 +68,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "TogglePause",
+                    "type": "Button",
+                    "id": "396fbc5c-aec9-4b2d-945c-ec68fd19f391",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -156,6 +164,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Thrust",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "705692ea-1b0f-4852-a564-52f4a27dca21",
+                    "path": "<Keyboard>/p",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TogglePause",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

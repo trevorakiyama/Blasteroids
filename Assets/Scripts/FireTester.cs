@@ -31,6 +31,9 @@ public class FireTester : MonoBehaviour
         _controls.PlayerShip.Exit.performed += HandleExit;
         _controls.PlayerShip.Exit.Enable();
 
+        _controls.PlayerShip.TogglePause.performed += HandleTogglePause;
+        _controls.PlayerShip.TogglePause.Enable();
+
 
         _controls.PlayerShip.MoveUp.performed += HandleUp;
         _controls.PlayerShip.MoveUp.canceled += HandleNoUp;
@@ -90,6 +93,22 @@ public class FireTester : MonoBehaviour
     private void HandleLeft(InputAction.CallbackContext context) { PlayerInputStates.moveLeft = true; }
     private void HandleNoLeft(InputAction.CallbackContext context) { PlayerInputStates.moveLeft = false; }
 
+
+
+    private void HandleTogglePause(InputAction.CallbackContext context)
+    {
+        UnityEditor.EditorApplication.isPaused = !UnityEditor.EditorApplication.isPaused;
+
+        /*
+        if (Time.timeScale == 0)
+        {
+            Time.timeScale = 1;
+        } else
+        {
+            Time.timeScale = 0;
+        }
+        */
+    }
 
 
 

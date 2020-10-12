@@ -1,4 +1,4 @@
-// GENERATED AUTOMATICALLY FROM 'Assets/PlayerControls.inputactions'
+// GENERATED AUTOMATICALLY FROM 'Assets/Scripts/Controls/PlayerControls.inputactions'
 
 using System;
 using System.Collections;
@@ -78,6 +78,14 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""name"": ""Thrust"",
                     ""type"": ""Button"",
                     ""id"": ""db8121c1-76a0-465b-be0e-bfa6a4457704"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""TogglePause"",
+                    ""type"": ""Button"",
+                    ""id"": ""396fbc5c-aec9-4b2d-945c-ec68fd19f391"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -171,6 +179,17 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""action"": ""Thrust"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""705692ea-1b0f-4852-a564-52f4a27dca21"",
+                    ""path"": ""<Keyboard>/p"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TogglePause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -187,6 +206,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_PlayerShip_MoveLeft = m_PlayerShip.FindAction("MoveLeft", throwIfNotFound: true);
         m_PlayerShip_MoveRight = m_PlayerShip.FindAction("MoveRight", throwIfNotFound: true);
         m_PlayerShip_Thrust = m_PlayerShip.FindAction("Thrust", throwIfNotFound: true);
+        m_PlayerShip_TogglePause = m_PlayerShip.FindAction("TogglePause", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -244,6 +264,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_PlayerShip_MoveLeft;
     private readonly InputAction m_PlayerShip_MoveRight;
     private readonly InputAction m_PlayerShip_Thrust;
+    private readonly InputAction m_PlayerShip_TogglePause;
     public struct PlayerShipActions
     {
         private @PlayerControls m_Wrapper;
@@ -256,6 +277,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @MoveLeft => m_Wrapper.m_PlayerShip_MoveLeft;
         public InputAction @MoveRight => m_Wrapper.m_PlayerShip_MoveRight;
         public InputAction @Thrust => m_Wrapper.m_PlayerShip_Thrust;
+        public InputAction @TogglePause => m_Wrapper.m_PlayerShip_TogglePause;
         public InputActionMap Get() { return m_Wrapper.m_PlayerShip; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -289,6 +311,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Thrust.started -= m_Wrapper.m_PlayerShipActionsCallbackInterface.OnThrust;
                 @Thrust.performed -= m_Wrapper.m_PlayerShipActionsCallbackInterface.OnThrust;
                 @Thrust.canceled -= m_Wrapper.m_PlayerShipActionsCallbackInterface.OnThrust;
+                @TogglePause.started -= m_Wrapper.m_PlayerShipActionsCallbackInterface.OnTogglePause;
+                @TogglePause.performed -= m_Wrapper.m_PlayerShipActionsCallbackInterface.OnTogglePause;
+                @TogglePause.canceled -= m_Wrapper.m_PlayerShipActionsCallbackInterface.OnTogglePause;
             }
             m_Wrapper.m_PlayerShipActionsCallbackInterface = instance;
             if (instance != null)
@@ -317,6 +342,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Thrust.started += instance.OnThrust;
                 @Thrust.performed += instance.OnThrust;
                 @Thrust.canceled += instance.OnThrust;
+                @TogglePause.started += instance.OnTogglePause;
+                @TogglePause.performed += instance.OnTogglePause;
+                @TogglePause.canceled += instance.OnTogglePause;
             }
         }
     }
@@ -331,5 +359,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnMoveLeft(InputAction.CallbackContext context);
         void OnMoveRight(InputAction.CallbackContext context);
         void OnThrust(InputAction.CallbackContext context);
+        void OnTogglePause(InputAction.CallbackContext context);
     }
 }

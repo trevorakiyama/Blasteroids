@@ -58,83 +58,59 @@ public class PlayerSystem : SystemBase
     float lastBulletTime = 0;
     float bulletDelay = 0.1f;
 
-    protected void HandlePlayerFiring(BulletSystem bulletSystem)
-    {
+    //protected void HandlePlayerFiring(BulletSystem bulletSystem)
+    //{
 
-        if (PlayerInputStates.fire == true)
-        {
-            bool newBullet = false;
+    //    if (PlayerInputStates.fire == true)
+    //    {
+    //        bool newBullet = false;
 
-            lastBulletTime += Time.DeltaTime;
+    //        lastBulletTime += Time.DeltaTime;
 
-            if (PlayerInputStates.newfire)
-            {
-                newBullet = true;
-                PlayerInputStates.newfire = false;
+    //        if (PlayerInputStates.newfire)
+    //        {
+    //            newBullet = true;
+    //            PlayerInputStates.newfire = false;
 
-                lastBulletTime = 0;
+    //            lastBulletTime = 0;
 
-            }
-            else
-            {
-                if (lastBulletTime > bulletDelay)
-                {
-                    newBullet = true;
-                    lastBulletTime -= bulletDelay;
-                }
-            }
-
-
-            if (newBullet)
-            {
-
-                float ttl = 2;
-                // TODO Make this call objects or even entity managers.
-                Vector3 playerPos = EntityManager.GetComponentData<Translation>(PlayerSystem.playerEntity).Value;
-                Vector3 playerMovement = EntityManager.GetComponentData<Movement>(PlayerSystem.playerEntity).velocity;
-                Vector3 targetPos = EntityManager.GetComponentData<Translation>(TargetSystem.target).Value;
-                //Vector3 targetPos = TargetSystem.targetPos; // TargetScript.position;
-
-                // Calculate rotation
-                Vector3 dir = targetPos - playerPos;
-
-                Quaternion look = Quaternion.LookRotation(dir, new Vector3(0, 0, 1));
-
-                float3 velocity = dir.normalized * 100 + playerMovement;
-
-                bulletSystem.createBullet(playerPos, look, velocity, ttl, PlayerSystem.playerEntity);
+    //        }
+    //        else
+    //        {
+    //            if (lastBulletTime > bulletDelay)
+    //            {
+    //                newBullet = true;
+    //                lastBulletTime -= bulletDelay;
+    //            }
+    //        }
 
 
-                /*
-                EntityManager.AddComponentData<Movement>(Prefabs.bulletPrefab,
-                new Movement
-                {
-                    velocity = dir.normalized * 100 + playerMovement,
-                    dummy = 10
-                });
+    //        if (newBullet)
+    //        {
 
-                EntityManager.AddComponentData<TTL>(Prefabs.bulletPrefab,
-                new TTL
-                {
-                    ttl = 2
-                });
+    //            float ttl = 2;
+    //            // TODO Make this call objects or even entity managers.
+    //            Vector3 playerPos = EntityManager.GetComponentData<Translation>(PlayerSystem.playerEntity).Value;
+    //            Vector3 playerMovement = EntityManager.GetComponentData<Movement>(PlayerSystem.playerEntity).velocity;
+    //            Vector3 targetPos = EntityManager.GetComponentData<Translation>(TargetSystem.target).Value;
+    //            //Vector3 targetPos = TargetSystem.targetPos; // TargetScript.position;
+
+    //            // Calculate rotation
+    //            Vector3 dir = targetPos - playerPos;
 
 
-                Entity newEntity = EntityManager.Instantiate(Prefabs.bulletPrefab);
-                EntityManager.SetComponentData<Translation>(newEntity, new Translation
-                {
-                    Value = playerPos
-                });
-                EntityManager.SetComponentData<Rotation>(newEntity, new Rotation
-                {
-                    Value = look
-                });
 
-                */
-            }
+    //            Quaternion look = Quaternion.LookRotation(dir, new Vector3(0, 0, 1));
 
-        }
-    }
+
+    //            float3 velocity = dir.normalized * Settings._bulletSpeed * 100f;
+
+    //            bulletSystem.createBullet(playerPos, look, velocity, ttl, PlayerSystem.playerEntity);
+
+    //        }
+
+    //    }
+    //}
 
 
 
@@ -176,7 +152,7 @@ public class PlayerSystem : SystemBase
 
             Entities.ForEach((Entity entity, ref Translation translation, ref Movement movement, in PlayerShip targ) =>
             {
-                movement.velocity = newMovement * delta * 200;
+                movement.velocity = newMovement * delta * Settings._movementSpeed;
 
             }).WithBurst().Run();
         } else

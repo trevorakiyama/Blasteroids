@@ -18,7 +18,16 @@ public class Prefabs : MonoBehaviour, IDeclareReferencedPrefabs, IConvertGameObj
         Entity prefabEntity = conversionSystem.GetPrimaryEntity(prefabBulletObject);
         bulletPrefab = prefabEntity;
 
-        
+        dstManager.AddComponentData<Movement>(bulletPrefab, new Movement
+        {
+            velocity = 100,
+            dummy = 0
+        });
+
+        dstManager.AddComponentData<TTL>(bulletPrefab, new TTL
+        {
+            ttl = 2
+        });
 
     }
 
