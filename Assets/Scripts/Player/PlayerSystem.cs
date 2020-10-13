@@ -24,20 +24,8 @@ public class PlayerSystem : SystemBase
     // Start is called before the first frame update
     protected override void OnStartRunning()
     {
-        var entities = EntityManager.GetAllEntities();
 
-        foreach (Entity entity in entities)
-        {
-            var name = EntityManager.GetName(entity);
-
-            if (name.Equals("PlayerShip"))
-            {
-                EntityManager.AddComponentData<PlayerShip>(entity, new PlayerShip());
-                EntityManager.AddComponentData<Movement>(entity, new Movement() { velocity = new float3(0, 0, 0) });
-                EntityManager.AddComponentData<Bullet>(entity, new Bullet() { shooter = entity });
-                playerEntity = entity;
-            }
-        }
+        playerEntity = EntityManager.Instantiate(PlayerShipScript.playerShipPrefab);
 
         playerFire = new PlayerFiring();
 
@@ -52,66 +40,6 @@ public class PlayerSystem : SystemBase
         playerFire.HandlePlayerFiring(EntityManager, Time.DeltaTime);
         HandleMovement();
     }
-
-
-    // TODO:  Should the player firing go to another Class or system?
-    float lastBulletTime = 0;
-    float bulletDelay = 0.1f;
-
-    //protected void HandlePlayerFiring(BulletSystem bulletSystem)
-    //{
-
-    //    if (PlayerInputStates.fire == true)
-    //    {
-    //        bool newBullet = false;
-
-    //        lastBulletTime += Time.DeltaTime;
-
-    //        if (PlayerInputStates.newfire)
-    //        {
-    //            newBullet = true;
-    //            PlayerInputStates.newfire = false;
-
-    //            lastBulletTime = 0;
-
-    //        }
-    //        else
-    //        {
-    //            if (lastBulletTime > bulletDelay)
-    //            {
-    //                newBullet = true;
-    //                lastBulletTime -= bulletDelay;
-    //            }
-    //        }
-
-
-    //        if (newBullet)
-    //        {
-
-    //            float ttl = 2;
-    //            // TODO Make this call objects or even entity managers.
-    //            Vector3 playerPos = EntityManager.GetComponentData<Translation>(PlayerSystem.playerEntity).Value;
-    //            Vector3 playerMovement = EntityManager.GetComponentData<Movement>(PlayerSystem.playerEntity).velocity;
-    //            Vector3 targetPos = EntityManager.GetComponentData<Translation>(TargetSystem.target).Value;
-    //            //Vector3 targetPos = TargetSystem.targetPos; // TargetScript.position;
-
-    //            // Calculate rotation
-    //            Vector3 dir = targetPos - playerPos;
-
-
-
-    //            Quaternion look = Quaternion.LookRotation(dir, new Vector3(0, 0, 1));
-
-
-    //            float3 velocity = dir.normalized * Settings._bulletSpeed * 100f;
-
-    //            bulletSystem.createBullet(playerPos, look, velocity, ttl, PlayerSystem.playerEntity);
-
-    //        }
-
-    //    }
-    //}
-
 
 
     protected void HandleMovement()
@@ -147,12 +75,16 @@ public class PlayerSystem : SystemBase
 
             newMovement *= thrust;
 
+
+            float movementSpeed = Settings._movementSpeed;
+
+
             //float3 pos = new float3(0, 0, 0);
             var delta = Time.DeltaTime;
 
             Entities.ForEach((Entity entity, ref Translation translation, ref Movement movement, in PlayerShip targ) =>
             {
-                movement.velocity = newMovement * delta * Settings._movementSpeed;
+                movement.velocity = newMovement * (delta * movementSpeed);
 
             }).WithBurst().Run();
         } else

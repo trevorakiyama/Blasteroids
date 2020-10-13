@@ -43,29 +43,17 @@ public class PlayerFiring
             if (newBullet)
             {
 
-                // TODO Make this call objects or even entity managers.
                 Vector3 playerPos = entityManager.GetComponentData<Translation>(PlayerSystem.playerEntity).Value;
-                Vector3 playerMovement = entityManager.GetComponentData<Movement>(PlayerSystem.playerEntity).velocity;
-                Vector3 targetPos = entityManager.GetComponentData<Translation>(TargetSystem.target).Value;
-
-                //Vector3 targetPos = TargetSystem.targetPos; // TargetScript.position;
-
-                // Calculate rotation
-                Vector3 dir = targetPos;
-
-                Quaternion look = Quaternion.LookRotation( dir);
-
-                Debug.DrawRay(playerPos, dir * 100, Color.white, 0.5f);
-
-                float3 velocity = dir.normalized * Settings._bulletSpeed;
-
-                // TODO: Make this configurable
-                float ttl = 2;
+                Vector3 targetPos = entityManager.GetComponentData<Translation>(TargetSystem.target).Value;  // rel to player
 
 
-                BulletSystem bulletSystem = World.DefaultGameObjectInjectionWorld.GetOrCreateSystem<BulletSystem>();
 
-                bulletSystem.createBullet(playerPos, look, velocity, ttl, PlayerSystem.playerEntity);
+
+
+
+                FireSpread(entityManager, playerPos, targetPos - playerPos, 1, 1);
+
+
 
             }
 
@@ -73,27 +61,52 @@ public class PlayerFiring
     }
 
 
-    private void Fire(EntityManager entityManager)
+    private void FireSpread(EntityManager entityManager, float3 source, float3 direction, int number, float spread)
     {
 
 
         float bulletSpeed = Settings._bulletSpeed;
         float ttl = 2;
 
-        Vector3 playerPos = entityManager.GetComponentData<Translation>(PlayerSystem.playerEntity).Value;
-        Vector3 playerMovement = entityManager.GetComponentData<Movement>(PlayerSystem.playerEntity).velocity;
-        Vector3 targetPos = entityManager.GetComponentData<Translation>(TargetSystem.target).Value;  // rel to player
 
 
-
-        Vector3 dir = targetPos;
+        Vector3 dir = direction;
         float3 velocity = dir.normalized * bulletSpeed;
         Quaternion look = Quaternion.LookRotation(dir);
-        Debug.DrawRay(playerPos, dir * 100, Color.white, 0.5f);
+        Debug.DrawRay(source, dir * 100, Color.white, 0.5f);
+
 
 
         BulletSystem bulletSystem = World.DefaultGameObjectInjectionWorld.GetOrCreateSystem<BulletSystem>();
-        bulletSystem.createBullet(playerPos, look, velocity, ttl, PlayerSystem.playerEntity);
+        bulletSystem.createBullet(source, look, velocity, ttl, PlayerSystem.playerEntity);
+
+
+
+
+    }
+
+
+    private void Fire(EntityManager entityManager, float3 source, float3 direction)
+    {
+
+
+        float bulletSpeed = Settings._bulletSpeed;
+        float ttl = 2;
+
+        //Vector3 playerPos = entityManager.GetComponentData<Translation>(PlayerSystem.playerEntity).Value;
+        //Vector3 playerMovement = entityManager.GetComponentData<Movement>(PlayerSystem.playerEntity).velocity;
+        //Vector3 targetPos = entityManager.GetComponentData<Translation>(TargetSystem.target).Value;  // rel to player
+
+
+
+        Vector3 dir = direction;
+        float3 velocity = dir.normalized * bulletSpeed;
+        Quaternion look = Quaternion.LookRotation(dir);
+        Debug.DrawRay(source, dir * 100, Color.white, 0.5f);
+
+
+        BulletSystem bulletSystem = World.DefaultGameObjectInjectionWorld.GetOrCreateSystem<BulletSystem>();
+        bulletSystem.createBullet(source, look, velocity, ttl, PlayerSystem.playerEntity);
 
     }
 

@@ -14,7 +14,6 @@ public class PlayerInputStates : MonoBehaviour
 
 
 
-
     public float lastFireTime;
 
     public static void Fire()

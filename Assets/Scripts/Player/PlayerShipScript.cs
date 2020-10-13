@@ -1,25 +1,28 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.Entities;
 using UnityEngine;
 
-public class PlayerShipScript : MonoBehaviour
+public class PlayerShipScript : MonoBehaviour, IDeclareReferencedPrefabs, IConvertGameObjectToEntity
 {
 
-    public static Vector3 position;
+    public static Entity playerShipPrefab;
+    public GameObject prefabPlayerShipObject;
 
+    //public static Vector3 position;
 
-    // Start is called before the first frame update
-    void Start()
+    public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
     {
-        Cursor.visible = false;
 
+        Entity prefabEntity = conversionSystem.GetPrimaryEntity(prefabPlayerShipObject);
+        playerShipPrefab = prefabEntity;
 
-
-
+        dstManager.AddComponentData<PlayerShip>(playerShipPrefab, new PlayerShip { });
+        dstManager.AddComponentData<Movement>(playerShipPrefab, new Movement { });
     }
 
-    //// Update is called once per frame
-    //void Update()
-    //{
-    //}
+    public void DeclareReferencedPrefabs(List<GameObject> referencedPrefabs)
+    {
+        referencedPrefabs.Add(prefabPlayerShipObject);
+    }
 }

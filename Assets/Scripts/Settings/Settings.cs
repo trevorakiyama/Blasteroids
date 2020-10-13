@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Settings : MonoBehaviour
 {
-
     public float bulletSpeed;
     public float movementSpeed;
 
@@ -16,6 +15,8 @@ public class Settings : MonoBehaviour
     {
         _bulletSpeed = bulletSpeed;
         _movementSpeed = movementSpeed;
+
+        Screen.SetResolution(1920, 1080, FullScreenMode.ExclusiveFullScreen, 60);
     }
 
     public void Update()

@@ -4,30 +4,26 @@ using System.Collections.Generic;
 using Unity.Entities;
 using UnityEngine;
 
-public class TargetScript : MonoBehaviour
+public class TargetScript : MonoBehaviour, IDeclareReferencedPrefabs, IConvertGameObjectToEntity
 {
+
+    public static Entity targetPrefab;
+    public GameObject prefabTargetObject;
 
     public static Vector3 position;
 
-
-    // Start is called before the first frame update
-    void Start()
+    public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
     {
-        Cursor.visible = false;
 
+        Entity prefabEntity = conversionSystem.GetPrimaryEntity(prefabTargetObject);
+        targetPrefab = prefabEntity;
 
+        dstManager.AddComponentData<Target>(targetPrefab, new Target {});
     }
 
-    // Update is called once per frame
-    void Update()
+    public void DeclareReferencedPrefabs(List<GameObject> referencedPrefabs)
     {
-
-        var m = UnityEngine.InputSystem.Mouse.current.position.ReadValue();
-        var mm = Camera.main.ScreenToWorldPoint(new Vector3(m.x, m.y, 200));
-
-        gameObject.transform.position = mm;
-
-        TargetScript.position = mm;
+        referencedPrefabs.Add(prefabTargetObject);
     }
 }
 

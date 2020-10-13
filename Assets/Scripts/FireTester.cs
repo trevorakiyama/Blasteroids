@@ -63,6 +63,35 @@ public class FireTester : MonoBehaviour
     private void OnDisable()
     {
         _controls.PlayerShip.Fire.performed -= HandleFire;
+        _controls.PlayerShip.Fire.canceled -= HandleNoFire;
+        _controls.PlayerShip.Fire.Disable();
+
+
+        _controls.PlayerShip.Exit.performed -= HandleExit;
+        _controls.PlayerShip.Exit.Disable();
+
+        _controls.PlayerShip.TogglePause.performed -= HandleTogglePause;
+        _controls.PlayerShip.TogglePause.Disable();
+
+
+        _controls.PlayerShip.MoveUp.performed -= HandleUp;
+        _controls.PlayerShip.MoveUp.canceled -= HandleNoUp;
+        _controls.PlayerShip.MoveUp.Disable();
+
+        _controls.PlayerShip.MoveDown.performed -= HandleDown;
+        _controls.PlayerShip.MoveDown.canceled -= HandleNoDown;
+        _controls.PlayerShip.MoveDown.Disable();
+
+        _controls.PlayerShip.MoveRight.performed -= HandleRight;
+        _controls.PlayerShip.MoveRight.canceled -= HandleNoRight;
+        _controls.PlayerShip.MoveRight.Disable();
+
+        _controls.PlayerShip.MoveLeft.performed -= HandleLeft;
+        _controls.PlayerShip.MoveLeft.canceled -= HandleNoLeft;
+        _controls.PlayerShip.MoveLeft.Disable();
+
+
+
     }
 
     private void HandleFire(InputAction.CallbackContext context)
@@ -97,7 +126,12 @@ public class FireTester : MonoBehaviour
 
     private void HandleTogglePause(InputAction.CallbackContext context)
     {
+
+#if UNITY_EDITOR
+
         UnityEditor.EditorApplication.isPaused = !UnityEditor.EditorApplication.isPaused;
+#endif
+
 
         /*
         if (Time.timeScale == 0)

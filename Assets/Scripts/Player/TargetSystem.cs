@@ -22,61 +22,25 @@ public class TargetSystem : SystemBase
         Debug.Log("START");
 
 
-        var entities = EntityManager.GetAllEntities();
-
-        foreach (Entity entity in entities)
-        {
-            var name = EntityManager.GetName(entity);
-
-            if (name.Equals("Target"))
-            {
-                EntityManager.AddComponentData<Target>(entity, new Target());
-                target = entity;
-            }
-
-        }
+        target = EntityManager.Instantiate(TargetScript.targetPrefab);        
 
         main = Camera.main;
 
     }
 
-    ProfilerMarker m1 = new ProfilerMarker("M1");
-
     protected override void OnUpdate()
     {
-
-        m1.Begin();
-
         var m = UnityEngine.InputSystem.Mouse.current.position.ReadValue();
         var mm = main.ScreenToWorldPoint(new Vector3(m.x, m.y, 200));
-
-
-        m1.End();
 
         // TODO:  Does this need to be cached better
         Translation playerTrans = EntityManager.GetComponentData<Translation>(PlayerSystem.playerEntity);
 
         float3 playerPos = playerTrans.Value;
 
-        playerTrans.Value = (float3)mm - playerPos;
+        playerTrans.Value = (float3)mm;
 
         EntityManager.SetComponentData<Translation>(target, playerTrans);
-
-        //float3 playerPos = EntityManager.GetComponentData<Translation>(PlayerSystem.playerEntity).Value;
-
-        //EntityManager.SetComponentData<Translation>(PlayerSystem.playerEntity, );
-
-        ////float3 playerPos = PlayerSystem.playerPos; 
-
-
-        //targetPos = mm;
-
-        //Entities.ForEach((Entity entity, ref Translation translation, in Target targ) =>
-        //{
-        //    translation.Value = (float3)mm - playerPos;
-
-
-        //}).Schedule();
 
     }
 }

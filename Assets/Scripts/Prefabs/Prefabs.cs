@@ -8,6 +8,7 @@ using UnityEngine;
 public class Prefabs : MonoBehaviour, IDeclareReferencedPrefabs, IConvertGameObjectToEntity
 {
     public static Entity bulletPrefab;
+    public static EntityArchetype bulletArchetype;
     public GameObject prefabBulletObject;
 
 
@@ -28,6 +29,9 @@ public class Prefabs : MonoBehaviour, IDeclareReferencedPrefabs, IConvertGameObj
         {
             ttl = 2
         });
+
+        bulletArchetype = dstManager.GetChunk(bulletPrefab).Archetype;
+        
 
     }
 
